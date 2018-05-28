@@ -1,0 +1,5 @@
+* EmilianoRK Emacs Configuration
+
+This repository contains my Emacs configuration. It is written and documented
+using literate programming style. I'm basing this version on
+[[https://github.com/munen/emacs.d]].

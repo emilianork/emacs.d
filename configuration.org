@@ -1,3 +1,4 @@
+
 #+TITLE: Emacs configuration
 #+AUTHOR: Emiliano Cabrera
 #+EMAIL: jemiliano.cabrera@protonmail.com
@@ -30,9 +31,10 @@ package list with =M-x package-refresh-contents= and install everything using
 #+BEGIN_SRC emacs-lisp
   (require 'package)
 
-  (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                           ("marmalade" . "https://marmalade-repo.org/packages/")
-                           ("melpa" . "https://melpa.org/packages/")))
+  (setq package-archives '(("gnu" .          "https://elpa.gnu.org/packages/")
+                           ("marmalade" .    "https://marmalade-repo.org/packages/")
+                           ("melpa" .        "https://melpa.org/packages/")
+                           ("melpa-stable" . "https://stable.melpa.org/packages/")))
 #+END_SRC
 
 ** Define packages that are to be installed
@@ -72,6 +74,7 @@ in separate files, some are used with the default configuration.
                         multi-term
                         nyan-mode
                         org-bullets
+                        org-trello
                         paredit
                         powerline
                         rainbow-delimiters
@@ -564,6 +567,32 @@ Show org-mode bullets as UTF-8 characters.
 #+BEGIN_SRC emacs-lisp
 (use-package org-bullets
    :init (add-hook 'org-mode-hook 'org-bullets-mode))
+#+END_SRC
+
+** Elfeed
+
+Elfeed Repo [[https://github.com/skeeto/elfeed]]
+
+Elfeed is an extensible web feed reader for Emacs, supporting both Atom and RSS.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package elfeed
+               :custom (elfeed-feeds
+                        '("https://www.reddit.com/r/emacs/.rss"
+                          "https://www.reddit.com/r/unixporn/.rss"
+                          "https://www.reddit.com/r/programming/.rss"
+                          "http://planet.emacsen.org/atom.xml"))
+               (elfeed-db-directory "~/.emacs.d/elfeed"))
+#+END_SRC
+
+** Org trello
+
+org-trello [[http://org-trello.github.io]]
+
+Org-trello is an emacs minor mode to extend org-mode with Trello abilities.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org-trello)
 #+END_SRC
 
 * Custom Functions

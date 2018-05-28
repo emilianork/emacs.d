@@ -43,7 +43,6 @@ List all used third-party packages. Most will be configured further
 in separate files, some are used with the default configuration.
 
 #+BEGIN_SRC emacs-lisp
-
   (defvar my-packages '(ag
                         aggressive-indent
                         alert
@@ -63,6 +62,7 @@ in separate files, some are used with the default configuration.
                         elfeed
                         esup
                         exec-path-from-shell
+                        flycheck
                         fringe-current-line
                         git-gutter-fringe
                         ivy counsel-tramp
@@ -88,7 +88,7 @@ in separate files, some are used with the default configuration.
                         zone-nyan))
 #+END_SRC
 
-** Install packages
+** COMMENT Install packages
 #+BEGIN_SRC emacs-lisp
   (dolist (p my-packages)
     (unless (package-installed-p p)
@@ -224,9 +224,9 @@ operations.
 Buffers has unique names, even when two different files with same name are open.
 
 #+BEGIN_SRC emacs-lisp
-(require 'uniquify)
+  (require 'uniquify)
 
-(setq uniquify-buffer-name-style 'forward)
+  (setq uniquify-buffer-name-style 'forward)
 #+END_SRC
 
 ** Show paren hooks
@@ -234,16 +234,45 @@ Buffers has unique names, even when two different files with same name are open.
 Show paren mode highlihts the maching parenthesis of the current cursor.
 
 #+BEGIN_SRC emacs-lisp
-(add-hook 'emacs-lisp-mode-hook 'show-paren-mode)
-(add-hook 'clojure-mode-hook 'show-paren-mode)
-(add-hook 'clojurescript-mode-hook 'show-paren-mode)
-(add-hook 'clojurec-mode-hook 'show-paren-mode)
-(add-hook 'cider-repl-mode-hook 'show-paren-mode)
+  (add-hook 'emacs-lisp-mode-hook 'show-paren-mode)
+  (add-hook 'clojure-mode-hook 'show-paren-mode)
+  (add-hook 'clojurescript-mode-hook 'show-paren-mode)
+  (add-hook 'clojurec-mode-hook 'show-paren-mode)
+  (add-hook 'cider-repl-mode-hook 'show-paren-mode)
 #+END_SRC
 
 ** Org Settings
 #+BEGIN_SRC emacs-lisp
-(setq org-src-fontify-natively t)
+  (setq org-src-fontify-natively t)
+#+END_SRC
+** Dired Mode Settings
+Dired makes an Emacs buffer containing a listing of a directory, and optionally
+some of its subdirectories as well.
+
+#+BEGIN_SRC emacs-lisp
+  (setq-default dired-listing-switches "-alh")
+#+END_SRC
+
+** Enabled windmove
+Windmove is built into Emacs. It lets you move point from window to window using
+Shift and the arrow keys. This is easier to type than ‘C-x o’ when there are
+multiple windows open.
+
+#+BEGIN_SRC emacs-lisp
+  (when (fboundp 'windmove-default-keybindings)
+    (windmove-default-keybindings))
+#+END_SRC
+** Enabled winner-mode
+Allows to ~undo~ (and ~redo~) changes in the window configuration with the key
+commands ~C-c left~ and ~C-c right~.
+
+#+BEGIN_SRC emacs-lisp
+  (winner-mode 1)
+#+END_SRC
+** CustomFile
+#+BEGIN_SRC emacs-lisp
+  (setq custom-file "~/.emacs.d/custom-settings.el")
+  (load custom-file t)
 #+END_SRC
 * Packages Settings
 
@@ -257,9 +286,9 @@ Whenever the window scrolls a light will shine on top of the cursor so I know
 where it is.
 
 #+BEGIN_SRC emacs-lisp
-(use-package beacon
-  :diminish beacon-mode
-  :init (beacon-mode t))
+  (use-package beacon
+    :diminish beacon-mode
+    :init (beacon-mode t))
 #+END_SRC
 
 ** Powerline
@@ -282,8 +311,8 @@ as in the user's shell.
 
 #+BEGIN_SRC emacs-lisp
   (use-package exec-path-from-shell
-               :config (when (memq window-system '(mac ns x))
-                         (exec-path-from-shell-initialize)))
+    :config (when (memq window-system '(mac ns x))
+              (exec-path-from-shell-initialize)))
 #+END_SRC
 
 ** Multi term
@@ -293,29 +322,29 @@ multi-term repo [[https://github.com/emacsorphanage/multi-term/]]
 Managing multiple terminal buffers in Emacs.
 
 #+BEGIN_SRC emacs-lisp
-(use-package multi-term
-             :custom (multi-term-buffer-name "Term")
-             :config
-             ;; This code was copy paste from the internet long time ago
-             ;; but I don't remember from who (sorry for the credits).
-             (defun emilianork/multi-term-here ()
-               "Opens up a new shell in the directory associated with the
-current buffer's file. The shell is renamed to match that
-directory to make multiple shell windows easier."
-               (interactive)
-               (let* ((height (/ (window-total-height) 2)))
-                 (split-window-vertically (- height))
-                 (other-window 1)
-                 (multi-term)))
+  (use-package multi-term
+    :custom (multi-term-buffer-name "Term")
+    :config
+    ;; This code was copy paste from the internet long time ago but I don't
+    ;; remember from who (sorry for the credits).
+    (defun emilianork/multi-term-here ()
+      "Opens up a new shell in the directory associated with the
+  current buffer's file. The shell is renamed to match that
+  directory to make multiple shell windows easier."
+      (interactive)
+      (let* ((height (/ (window-total-height) 2)))
+        (split-window-vertically (- height))
+        (other-window 1)
+        (multi-term)))
 
-             (defun emilianork/multi-term-kill ()
-               "Send ESC in term mode."
-               (interactive)
-               (term-send-raw-string "exit\n")
-               (delete-window))
+    (defun emilianork/multi-term-kill ()
+      "Send ESC in term mode."
+      (interactive)
+      (term-send-raw-string "exit\n")
+      (delete-window))
 
-             (global-set-key (kbd "C-!") 'emilianork/multi-term-here)
-             (global-set-key (kbd "C-#") 'emilianork/multi-term-kill))
+    (global-set-key (kbd "C-!") 'emilianork/multi-term-here)
+    (global-set-key (kbd "C-#") 'emilianork/multi-term-kill))
 #+END_SRC
 ** Swiper
 
@@ -326,30 +355,35 @@ Counsel, a collection of Ivy-enhanced versions of common Emacs commands.
 Swiper, an Ivy-enhanced alternative to isearch.
 
 #+BEGIN_SRC emacs-lisp
-(use-package ivy
-             :diminish ivy-mode
-             :config
-             (ivy-mode t)
-             (setq ivy-use-virtual-buffers t)
-             (setq enable-recursive-minibuffers t)
-             (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
+  (use-package ivy
+    :diminish ivy-mode
+    :init
+    (progn
+      (add-hook 'pdf-view-mode-hook
+                '(lambda()
+                   (define-key pdf-view-mode-map "\C-s" 'isearch-forward))))
+    :config
+    (ivy-mode t)
+    (setq ivy-use-virtual-buffers t)
+    (setq enable-recursive-minibuffers t)
+    (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
 
-             :bind
-             ("C-s"     . 'swiper)
-             ("C-c C-r" . 'ivy-resume)
-             ("<f6>"    . 'ivy-resume)
-             ("M-x"     . 'counsel-M-x)
-             ("C-x C-f" . 'counsel-find-file)
-             ("<f1> f"  . 'counsel-describe-function)
-             ("<f1> v"  . 'counsel-describe-variable)
-             ("<f1> l"  . 'counsel-find-library)
-             ("<f2> i"  . 'counsel-info-lookup-symbol)
-             ("<f2> u"  . 'counsel-unicode-char)
-             ("C-c g"   . 'counsel-git)
-             ("C-c j"   . 'counsel-git-grep)
-             ("C-c k"   . 'counsel-ag)
-             ("C-x l"   . 'counsel-locate)
-             ("C-S-o"   . 'counsel-rhythmbox))
+    :bind
+    ("C-s"     . 'swiper)
+    ("C-c C-r" . 'ivy-resume)
+    ("<f6>"    . 'ivy-resume)
+    ("M-x"     . 'counsel-M-x)
+    ("C-x C-f" . 'counsel-find-file)
+    ("<f1> f"  . 'counsel-describe-function)
+    ("<f1> v"  . 'counsel-describe-variable)
+    ("<f1> l"  . 'counsel-find-library)
+    ("<f2> i"  . 'counsel-info-lookup-symbol)
+    ("<f2> u"  . 'counsel-unicode-char)
+    ("C-c g"   . 'counsel-git)
+    ("C-c j"   . 'counsel-git-grep)
+    ("C-c k"   . 'counsel-ag)
+    ("C-x l"   . 'counsel-locate)
+    ("C-S-o"   . 'counsel-rhythmbox))
 #+END_SRC
 
 ** Undo-tree
@@ -357,12 +391,12 @@ Swiper, an Ivy-enhanced alternative to isearch.
 undo-tree repo [[https://elpa.gnu.org/packages/undo-tree.html]]
 
 #+BEGIN_SRC emacs-lisp
-(use-package undo-tree
-             :diminish undo-tree-mode
-             :config
-             (global-undo-tree-mode)
-             (setq undo-tree-visualizer-timestamps t)
-             (setq undo-tree-visualizer-diff t))
+  (use-package undo-tree
+    :diminish undo-tree-mode
+    :config
+    (global-undo-tree-mode)
+    (setq undo-tree-visualizer-timestamps t)
+    (setq undo-tree-visualizer-diff t))
 #+END_SRC
 
 ** vlf
@@ -373,11 +407,11 @@ Emacs minor mode that allows viewing, editing, searching and comparing large
 files in batches, trading memory for processor time.
 
 #+BEGIN_SRC emacs-lisp
-(use-package vlf
-             :config (defun emilianork/vlf (file)
-                       (emilianork/require-package 'vlf 'vlf-setup)
-                       (interactive "fFile to open: ")
-                       (vlf file)))
+  (use-package vlf
+    :config (defun emilianork/vlf (file)
+              (emilianork/require-package 'vlf 'vlf-setup)
+              (interactive "fFile to open: ")
+              (vlf file)))
 #+END_SRC
 
 ** Diminish
@@ -387,9 +421,9 @@ diminish repo [[https://github.com/myrjola/diminish.el/tree/master]]
 Diminished modes are minor modes with no modeline display.
 
 #+BEGIN_SRC emacs-lisp
-(use-package diminish
-             :config
-             (diminish 'auto-revert-mode))
+  (use-package diminish
+    :config
+    (diminish 'auto-revert-mode))
 #+END_SRC
 
 ** Git gutter
@@ -399,10 +433,10 @@ git-gutter repo [[https://github.com/syohex/emacs-git-gutter/tree/master]]
 Emacs port of GitGutter which is Sublime Text Plugin.
 
 #+BEGIN_SRC emacs-lisp
-(use-package git-gutter-fringe
-             :diminish git-gutter-mode
-             :config
-             (global-git-gutter-mode))
+  (use-package git-gutter-fringe
+    :diminish git-gutter-mode
+    :config
+    (global-git-gutter-mode))
 #+END_SRC
 
 ** Magit
@@ -412,7 +446,7 @@ Magit repo [[https://github.com/magit/magit/tree/master]]
 It's Magit! A Git porcelain inside Emacs.
 
 #+BEGIN_SRC emacs-lisp
-(use-package magit)
+  (use-package magit)
 #+END_SRC
 
 ** Dumb-jump
@@ -422,13 +456,13 @@ dumb-jump repo [[https://github.com/jacktasia/dumb-jump/tree/master]]
 An Emacs "jump to definition" package
 
 #+BEGIN_SRC emacs-lisp
-(use-package dumb-jump
-  :init
-  (progn
-    (add-hook 'emacs-lisp-mode-hook 'dumb-jump-mode)
-    (add-hook 'clojure-mode-hook 'dumb-jump-mode)
-    (add-hook 'clojurescript-mode-hook 'dumb-jump-mode)
-    (add-hook 'clojurec-mode-hook 'dumb-jump-mode)))
+  (use-package dumb-jump
+    :init
+    (progn
+      (add-hook 'emacs-lisp-mode-hook 'dumb-jump-mode)
+      (add-hook 'clojure-mode-hook 'dumb-jump-mode)
+      (add-hook 'clojurescript-mode-hook 'dumb-jump-mode)
+      (add-hook 'clojurec-mode-hook 'dumb-jump-mode)))
 #+END_SRC
 
 ** Paredit
@@ -441,15 +475,15 @@ Links of interest:
 + paredit animated cheatsheet [[http://danmidwood.com/content/2014/11/21/animated-paredit.html]]
 
 #+BEGIN_SRC emacs-lisp
-(use-package paredit
-  :diminish paredit-mode
-  :init
-  (progn
-    (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
-    (add-hook 'clojure-mode-hook 'paredit-mode)
-    (add-hook 'clojurescript-mode-hook 'paredit-mode)
-    (add-hook 'clojurec-mode-hook 'paredit-mode)
-    (add-hook 'cider-repl-mode-hook 'paredit-mode)))
+  (use-package paredit
+    :diminish paredit-mode
+    :init
+    (progn
+      (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+      (add-hook 'clojure-mode-hook 'paredit-mode)
+      (add-hook 'clojurescript-mode-hook 'paredit-mode)
+      (add-hook 'clojurec-mode-hook 'paredit-mode)
+      (add-hook 'cider-repl-mode-hook 'paredit-mode)))
 #+END_SRC
 
 ** Rainbow delimiters
@@ -461,14 +495,14 @@ delimiters such as parentheses, brackets or braces according to their depth.
 Each successive level is highlighted in a different color.
 
 #+BEGIN_SRC emacs-lisp
-(use-package rainbow-delimiters
-  :init
-  (progn
-    (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
-    (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
-    (add-hook 'clojurescript-mode-hook 'rainbow-delimiters-mode)
-    (add-hook 'clojurec-mode-hook 'rainbow-delimiters-mode)
-    (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)))
+  (use-package rainbow-delimiters
+    :init
+    (progn
+      (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
+      (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
+      (add-hook 'clojurescript-mode-hook 'rainbow-delimiters-mode)
+      (add-hook 'clojurec-mode-hook 'rainbow-delimiters-mode)
+      (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)))
 #+END_SRC
 
 ** Editor Config
@@ -478,10 +512,10 @@ editorconfig repo [[https://github.com/editorconfig/editorconfig-emacs/tree/mast
 EditorConfig plugin for emacs http://editorconfig.org
 
 #+BEGIN_SRC emacs-lisp
-(use-package editorconfig
-  :diminish editorconfig-mode
-  :config
-  (editorconfig-mode 1))
+  (use-package editorconfig
+    :diminish editorconfig-mode
+    :config
+    (editorconfig-mode 1))
 #+END_SRC
 
 ** Aggressive Indent
@@ -491,27 +525,27 @@ aggressive-indent repo https://github.com/Malabarba/aggressive-indent-mode/tree/
 Emacs minor mode that keeps your code always indented. More reliable than electric-indent-mode.
 
 #+BEGIN_SRC emacs-lisp
-(use-package aggressive-indent
-  :diminish aggressive-indent-mode
-  :init
-  (progn
-    (add-hook 'emacs-lisp-mode-hook 'aggressive-indent-mode)
-    (add-hook 'clojure-mode-hook 'aggressive-indent-mode)
-    (add-hook 'clojurescript-mode-hook 'aggressive-indent-mode)
-    (add-hook 'clojurec-mode-hook 'aggressive-indent-mode)
-    (add-hook 'cider-repl-mode-hook 'aggressive-indent-mode)))
+  (use-package aggressive-indent
+    :diminish aggressive-indent-mode
+    :init
+    (progn
+      (add-hook 'emacs-lisp-mode-hook 'aggressive-indent-mode)
+      (add-hook 'clojure-mode-hook 'aggressive-indent-mode)
+      (add-hook 'clojurescript-mode-hook 'aggressive-indent-mode)
+      (add-hook 'clojurec-mode-hook 'aggressive-indent-mode)
+      (add-hook 'cider-repl-mode-hook 'aggressive-indent-mode)))
 #+END_SRC
-** Company
+** COMMENT Company
 
 company repo [[https://github.com/company-mode/company-mode/tree/master]]
 
 Modular in-buffer completion framework for Emacs http://company-mode.github.io/
 
 #+BEGIN_SRC emacs-lisp
-(use-package company
-             :diminish company-mode
-             :config
-             (global-company-mode))
+  (use-package company
+    :diminish company-mode
+    :config
+    (global-company-mode))
 #+END_SRC
 
 ** Clojure-mode
@@ -521,19 +555,19 @@ clojure-mode Repo [[https://github.com/clojure-emacs/clojure-mode/tree/master]]
 Emacs support for the Clojure(Script) programming language.
 
 #+BEGIN_SRC emacs-lisp
-(defun emilianork/cider-figwheel-repl ()
-  (interactive)
-  (with-current-buffer
-      (cider-current-repl-buffer)
-    (goto-char (point-max))
-    (insert "(require 'figwheel-sidecar.repl-api)
-             (figwheel-sidecar.repl-api/start-figwheel!)
-             (figwheel-sidecar.repl-api/cljs-repl)")
-    (cider-repl-return)))
+  (defun emilianork/cider-figwheel-repl ()
+    (interactive)
+    (with-current-buffer
+        (cider-current-repl-buffer)
+      (goto-char (point-max))
+      (insert "(require 'figwheel-sidecar.repl-api)
+               (figwheel-sidecar.repl-api/start-figwheel!)
+               (figwheel-sidecar.repl-api/cljs-repl)")
+      (cider-repl-return)))
 
-(use-package clojure-mode
-             :bind
-             ("C-c M-f" . 'emilianork/cider-figwheel-repl))
+  (use-package clojure-mode
+    :bind
+    ("C-c M-f" . 'emilianork/cider-figwheel-repl))
 #+END_SRC
 ** Cider
 
@@ -542,7 +576,7 @@ Cider repo [[https://github.com/clojure-emacs/cider/tree/master/]]
 The Clojure Interactive Development Environment that Rocks for Emacs.
 
 #+BEGIN_SRC emacs-lisp
-(use-package cider)
+  (use-package cider)
 #+END_SRC
 
 ** Nyan cat
@@ -553,9 +587,9 @@ Nyan Mode - Turn your Emacs into Nyanmacs! :)
 
 #+BEGIN_SRC emacs-lisp
 
-(use-package nyan-mode
-  :config
-  (nyan-mode))
+  (use-package nyan-mode
+    :config
+    (nyan-mode))
 
 #+END_SRC
 ** Org Bullets
@@ -565,8 +599,8 @@ org-bullets repo [[https://github.com/emacsorphanage/org-bullets/tree/master]]
 Show org-mode bullets as UTF-8 characters.
 
 #+BEGIN_SRC emacs-lisp
-(use-package org-bullets
-   :init (add-hook 'org-mode-hook 'org-bullets-mode))
+  (use-package org-bullets
+    :init (add-hook 'org-mode-hook 'org-bullets-mode))
 #+END_SRC
 
 ** Elfeed
@@ -577,12 +611,12 @@ Elfeed is an extensible web feed reader for Emacs, supporting both Atom and RSS.
 
 #+BEGIN_SRC emacs-lisp
   (use-package elfeed
-               :custom (elfeed-feeds
-                        '("https://www.reddit.com/r/emacs/.rss"
-                          "https://www.reddit.com/r/unixporn/.rss"
-                          "https://www.reddit.com/r/programming/.rss"
-                          "http://planet.emacsen.org/atom.xml"))
-               (elfeed-db-directory "~/.emacs.d/elfeed"))
+    :custom (elfeed-feeds
+             '("https://www.reddit.com/r/emacs/.rss"
+               "https://www.reddit.com/r/unixporn/.rss"
+               "https://www.reddit.com/r/programming/.rss"
+               "http://planet.emacsen.org/atom.xml"))
+    (elfeed-db-directory "~/.emacs.d/elfeed"))
 #+END_SRC
 
 ** Org trello
@@ -595,6 +629,20 @@ Org-trello is an emacs minor mode to extend org-mode with Trello abilities.
   (use-package org-trello)
 #+END_SRC
 
+** Flycheck
+
+flycheck repo [[http://www.flycheck.org/en/latest/]]
+
+Flycheck is a modern on-the-fly syntax checking extension for GNU Emacs,
+intended as replacement for the older Flymake extension which is part of
+GNU Emacs. For a detailed comparison to Flymake see Flycheck versus
+Flymake.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck
+    :diminish flycheck-mode
+    :config (global-flycheck-mode))
+#+END_SRC
 * Custom Functions
 
 Custom functions that add/modify Emacs functionality.

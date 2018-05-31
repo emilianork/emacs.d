@@ -86,6 +86,7 @@ in separate files, some are used with the default configuration.
                         undo-tree
                         use-package
                         vlf
+			which-key
                         yaml-mode
                         zone-nyan))
 #+END_SRC
@@ -170,6 +171,7 @@ operations.
 #+BEGIN_SRC emacs-lisp
   (setq inhibit-splash-screen t)
   (setq inhibit-startup-message t)
+  (setq initial-major-mode 'emacs-lisp-mode)
 #+END_SRC
 
 ** Initial major-mode
@@ -429,7 +431,9 @@ Diminished modes are minor modes with no modeline display.
 #+BEGIN_SRC emacs-lisp
   (use-package diminish
     :config
-    (diminish 'auto-revert-mode))
+    (diminish 'auto-revert-mode)
+    (diminish 'eldoc-mode)
+    (diminish 'org-src-mode))
 #+END_SRC
 
 ** Git gutter
@@ -720,20 +724,12 @@ formulas or graphics) directly as images in the source buffer.
 #+BEGIN_SRC emacs-lisp
   (use-package tex-site
     :config
-    (progn
-      (TeX-load-hack)
-
-      (add-hook 'LaTeX-mode-hook 'visual-line-mode)
-      (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-      (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
-
+    (defun emilianork/tex-site-custom ()
       ;; Adds latexmk-dvi to the compilation commands list
-      (LaTeX-mode)
       (push '("latexmk-dvi" "latexmk %s && dvipdf %s" TeX-run-TeX nil t :help "Run latexmk on file")
-            TeX-command-list)
+	    TeX-command-list)
 
-      (add-hook 'TeX-mode-hook '(lambda () (setq TeX-command-default "latexmk-dvi")))
-
+      (setq TeX-command-default "latexmk-dvi")
       (setq TeX-auto-save t)
       (setq TeX-parse-self t)
       (setq TeX-PDF-mode t)
@@ -741,10 +737,32 @@ formulas or graphics) directly as images in the source buffer.
       (setq TeX-command-default "latexmk-dvi")
 
       (setq TeX-view-program-selection '((output-pdf "PDF Viewer")))
+
       (setq TeX-view-program-list
-            '(("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")))
+	    '(("PDF Viewer"
+	       "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")))
+
       (turn-on-auto-fill)
-      (set-fill-column 80)))
+      (set-fill-column 80))
+    (progn
+      (add-hook 'LaTeX-mode-hook 'visual-line-mode)
+      (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+      (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+      (add-hook 'LaTeX-mode-hook 'emilianork/tex-site-custom)))
+#+END_SRC
+
+** Which-key
+
+which-key repo [[https://github.com/justbur/emacs-which-key/tree/master]]
+
+Emacs package that displays available keybindings in popup
+
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :config
+    (progn
+      (which-key-mode)
+      (setq which-key-idle-delay 0.3)))
 #+END_SRC
 * Custom Functions
 

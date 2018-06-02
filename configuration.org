@@ -49,13 +49,19 @@ in separate files, some are used with the default configuration.
                         auctex
                         beacon
                         challenger-deep-theme
-                        cider clojure-mode
-                        company company-go company-terraform
+                        cider
+			clojure-mode
+			command-log-mode
+                        company
+			company-go
+			company-terraform
                         csv
                         cyberpunk-theme
                         darkokai-theme
                         diminish
-                        docker docker-tramp dockerfile-mode
+                        docker
+			docker-tramp
+			dockerfile-mode
                         dracula-theme
                         dumb-jump
                         editorconfig
@@ -777,6 +783,24 @@ The Superior Lisp Interaction Mode for Emacs
 #+BEGIN_SRC emacs-lisp
   (setq inferior-lisp-program "/usr/local/bin/sbcl")
   (setq slime-contribs '(slime-fancy))
+#+END_SRC
+
+** Command log
+
+command-log-mode repo [[https://github.com/lewang/command-log-mode/tree/master]]
+
+Show event history and command history of some or all buffers.
+
+To see the log buffer, call M-x clm/open-command-log-buffer.
+
+The key strokes in the log are decorated with ISO9601 timestamps on
+the property `:time' so if you want to convert the log for
+screencasting purposes you could use the time stamp as a key into
+the video beginning.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package command-log-mode
+    :diminish command-log-mode)
 #+END_SRC
 
 * Custom Functions

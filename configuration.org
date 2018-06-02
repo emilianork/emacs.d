@@ -289,6 +289,15 @@ commands ~C-c left~ and ~C-c right~.
   (setq custom-file "~/.emacs.d/custom-settings.el")
   (load custom-file t)
 #+END_SRC
+** Delete selection mode
+
+ When Delete Selection mode is enabled, typed text replaces the
+ selection if the selection is active.  Otherwise, typed text is
+ just inserted at point regardless of any selection.
+
+#+BEGIN_SRC emacs-lisp
+  (delete-selection-mode t)
+#+END_SRC
 * Packages Settings
 
 This section contains settings for some of the packages downloaded.

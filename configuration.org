@@ -79,6 +79,7 @@ in separate files, some are used with the default configuration.
                         paredit
                         powerline
                         rainbow-delimiters
+			slime
                         spacemacs-theme
                         spinner
                         sunburn-theme
@@ -759,11 +760,25 @@ Emacs package that displays available keybindings in popup
 
 #+BEGIN_SRC emacs-lisp
   (use-package which-key
+    :diminish which-key-mode
     :config
     (progn
       (which-key-mode)
       (setq which-key-idle-delay 0.3)))
 #+END_SRC
+
+** Slime
+
+slime repo [[https://github.com/slime/slime]]
+
+The Superior Lisp Interaction Mode for Emacs
+
+
+#+BEGIN_SRC emacs-lisp
+  (setq inferior-lisp-program "/usr/local/bin/sbcl")
+  (setq slime-contribs '(slime-fancy))
+#+END_SRC
+
 * Custom Functions
 
 Custom functions that add/modify Emacs functionality.

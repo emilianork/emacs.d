@@ -257,8 +257,17 @@ Show paren mode highlihts the maching parenthesis of the current cursor.
 #+END_SRC
 
 ** Org Settings
+
+This will change the headers font size and items states of todo lists
+
 #+BEGIN_SRC emacs-lisp
   (setq org-src-fontify-natively t)
+
+  (setq org-todo-keywords
+	'((sequence "BACKLOG" "TODO" "STARTED" "DONE")))
+  (setq org-todo-keyword-faces
+	'(("BACKLOG" . "red") ("STARTED" . "purple1")
+	  ("TODO" . "yellow") ("DONE" . "green")))
 #+END_SRC
 ** Dired Mode Settings
 Dired makes an Emacs buffer containing a listing of a directory, and optionally
@@ -871,6 +880,8 @@ Custom functions that add/modify Emacs functionality.
   ;; go-to is binded to more than one keyscombination.
   (global-set-key (kbd "M-g M-g") 'emilianork/goto-line-with-feedback)
   (global-set-key (kbd "M-g g")   'emilianork/goto-line-with-feedback)
+
+  (global-set-key (kbd "C-c a") 'org-agenda)
 #+END_SRC
 * Personal Settings
 

@@ -835,16 +835,16 @@ Custom functions that add/modify Emacs functionality.
     "Renames both current buffer and file it's visiting to NEW-NAME."
     (interactive "sNew name: ")
     (let ((name (buffer-name))
-          (filename (buffer-file-name)))
+	  (filename (buffer-file-name)))
       (if (not filename)
-          (message "Buffer '%s' is not visiting a file!" name)
-        (if (get-buffer new-name)
-            (message "A buffer named '%s' already exists!" new-name)
-          (progn
-            (rename-file filename new-name 1)
-            (rename-buffer new-name)
-            (set-visited-file-name new-name)
-            (set-buffer-modified-p nil))))))
+	  (message "Buffer '%s' is not visiting a file!" name)
+	(if (get-buffer new-name)
+	    (message "A buffer named '%s' already exists!" new-name)
+	  (progn
+	    (rename-file filename new-name 1)
+	    (rename-buffer new-name)
+	    (set-visited-file-name new-name)
+	    (set-buffer-modified-p nil))))))
 
   (defun emilianork/indent-whole-buffer ()
     "Indent whole buffer"
@@ -857,9 +857,9 @@ Custom functions that add/modify Emacs functionality.
     "Kill all other buffers."
     (interactive)
     (mapc 'kill-buffer
-          (set-difference (buffer-list)
-                          (cons (current-buffer)
-                                (mapcar (lambda (x) (process-buffer x)) (process-list))))))
+	  (set-difference (buffer-list)
+			  (cons (current-buffer)
+				(mapcar (lambda (x) (process-buffer x)) (process-list))))))
 
 
   ;; Code from FrankRuben27 reddit user.
@@ -867,9 +867,9 @@ Custom functions that add/modify Emacs functionality.
     "Show line numbers temporarily, while prompting for the line number input"
     (interactive)
     (unwind-protect
-        (progn
-          (linum-mode 1)
-          (call-interactively #'goto-line))
+	(progn
+	  (linum-mode 1)
+	  (call-interactively #'goto-line))
       (linum-mode -1)))
 
   (global-set-key (kbd "M-n b r") 'emilianork/revert-buffer-no-confirm)

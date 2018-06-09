@@ -655,10 +655,9 @@ Elfeed is an extensible web feed reader for Emacs, supporting both Atom and RSS.
 #+BEGIN_SRC emacs-lisp
   (use-package elfeed
     :custom (elfeed-feeds
-             '("https://www.reddit.com/r/emacs/.rss"
-               "https://www.reddit.com/r/unixporn/.rss"
-               "https://www.reddit.com/r/programming/.rss"
-               "http://planet.emacsen.org/atom.xml"))
+	     '("http://sachachua.com/blog/feed/"
+	       "https://www.reddit.com/r/programming/.rss"
+	       "http://planet.emacsen.org/atom.xml"))
     (elfeed-db-directory "~/.emacs.d/elfeed"))
 #+END_SRC
 

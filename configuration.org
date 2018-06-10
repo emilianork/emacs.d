@@ -9,7 +9,7 @@ using literate programming style. I'm basing this version on
 
 * Installation
 
-* Initial *
+** Initial *
 
 Emacs configuration is usually done in the home directory in the =emacs.d=
 folder. This holds true for Unix and Linux Systems. For Windows, look it up
@@ -17,16 +17,16 @@ folder. This holds true for Unix and Linux Systems. For Windows, look it up
 
 =git clone git@github.com:emilianork/emacs.d.git ~/.emacs.d=
 
-* Dependencies *
+** Dependencies *
 
 Emacs dependencies/libraries are managed via the internal [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Packages.html#Packages][package management
 system]]. To initially install packages, open =~/.emacs.d/init.el=, refresh your
 package list with =M-x package-refresh-contents= and install everything using
 =M-x eval-buffer=.
 
-* Dependency managment
+** Dependency managment
 
-** Define package repositories(archives)
+*** Define package repositories(archives)
 
 #+BEGIN_SRC emacs-lisp
   (require 'package)
@@ -37,7 +37,7 @@ package list with =M-x package-refresh-contents= and install everything using
                            ("melpa-stable" . "https://stable.melpa.org/packages/")))
 #+END_SRC
 
-** Define packages that are to be installed
+*** Define packages that are to be installed
 
 List all used third-party packages. Most will be configured further
 in separate files, some are used with the default configuration.
@@ -62,6 +62,7 @@ in separate files, some are used with the default configuration.
                         docker
 			docker-tramp
 			dockerfile-mode
+                        doneburn-theme
                         dracula-theme
                         dumb-jump
                         editorconfig
@@ -98,7 +99,7 @@ in separate files, some are used with the default configuration.
                         zone-nyan))
 #+END_SRC
 
-** Install packages
+*** Install packages
 #+BEGIN_SRC emacs-lisp
   (dolist (p my-packages)
     (unless (package-installed-p p)
@@ -112,6 +113,7 @@ Current themes available are:
 
 + challenger-deep
 + cyberpunk
++ doneburn
 + dracula
 + material
 + material-light
@@ -122,7 +124,7 @@ Current themes available are:
 + sunburn
 
 #+BEGIN_SRC emacs-lisp
-  (load-theme 'darkokai t)
+  (load-theme 'doneburn t)
 #+END_SRC
 
 * Default Settings
@@ -307,9 +309,6 @@ commands ~C-c left~ and ~C-c right~.
 #+BEGIN_SRC emacs-lisp
   (delete-selection-mode t)
 #+END_SRC
-* Packages Settings
-
-This section contains settings for some of the packages downloaded.
 
 ** Beacon
 

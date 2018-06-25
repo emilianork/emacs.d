@@ -44,59 +44,64 @@ in separate files, some are used with the default configuration.
 
 #+BEGIN_SRC emacs-lisp
   (defvar my-packages '(ag
-                        aggressive-indent
-                        alert
-                        auctex
-                        beacon
-                        challenger-deep-theme
-                        cider
+			aggressive-indent
+			alert
+			auctex
+			beacon
+			challenger-deep-theme
+			cider
 			clojure-mode
 			command-log-mode
-                        company
+			company
 			company-go
 			company-terraform
-                        csv
-                        cyberpunk-theme
-                        darkokai-theme
-                        diminish
-                        docker
+			csv
+			cyberpunk-theme
+			darkokai-theme
+			diminish
+			docker
 			docker-tramp
 			dockerfile-mode
-                        doneburn-theme
-                        dracula-theme
-                        dumb-jump
-                        editorconfig
-                        elfeed
-                        esup
-                        exec-path-from-shell
-                        flycheck
-                        fringe-current-line
-                        git-gutter-fringe
-                        go-mode
-                        ivy counsel-tramp
-                        magit
-                        markdown-mode
-                        material-theme
-                        monokai-alt-theme
-                        monokai-theme
-                        multi-term
-                        nyan-mode
-                        org-bullets
-                        org-trello
-                        paredit
-                        powerline
-                        rainbow-delimiters
+			doneburn-theme
+			dracula-theme
+			dumb-jump
+			editorconfig
+			elfeed
+			esup
+			expand-region
+			exec-path-from-shell
+			flycheck
+			fringe-current-line
+			ggtags
+			git-gutter-fringe
+			go-mode
+			hungry-delete
+			ivy counsel-tramp
+			magit
+			markdown-mode
+			material-theme
+			monokai-alt-theme
+			monokai-theme
+			multi-term
+			nyan-mode
+			org-bullets
+			paredit
+			powerline
+			rainbow-delimiters
+			smartparens
 			slime
-                        spacemacs-theme
-                        spinner
-                        sunburn-theme
-                        terraform-mode
-                        undo-tree
-                        use-package
-                        vlf
+			spacemacs-theme
+			spinner
+			sunburn-theme
+			terraform-mode
+			undo-tree
+			use-package
+			vlf
 			which-key
-                        yaml-mode
-                        zone-nyan))
+			yaml-mode
+			yasnippet
+			yasnippet-snippets
+			zone-nyan))
 #+END_SRC
 
 *** Install packages
@@ -114,6 +119,7 @@ Current themes available are:
 + challenger-deep
 + cyberpunk
 + doneburn
++ darkokai
 + dracula
 + material
 + material-light
@@ -124,7 +130,7 @@ Current themes available are:
 + sunburn
 
 #+BEGIN_SRC emacs-lisp
-  (load-theme 'doneburn t)
+  (load-theme 'material-light t)
 #+END_SRC
 
 * Default Settings
@@ -268,8 +274,8 @@ This will change the headers font size and items states of todo lists
   (setq org-todo-keywords
 	'((sequence "BACKLOG" "TODO" "STARTED" "DONE")))
   (setq org-todo-keyword-faces
-	'(("BACKLOG" . "red") ("STARTED" . "purple1")
-	  ("TODO" . "yellow") ("DONE" . "green")))
+	'(("BACKLOG" . "red3") ("STARTED" . "violet")
+	  ("TODO" . "dark khaki") ("DONE" . "light green")))
 #+END_SRC
 ** Dired Mode Settings
 Dired makes an Emacs buffer containing a listing of a directory, and optionally
@@ -309,7 +315,9 @@ commands ~C-c left~ and ~C-c right~.
 #+BEGIN_SRC emacs-lisp
   (delete-selection-mode t)
 #+END_SRC
+* Packages Settings
 
+This section contains settings for some of the packages downloaded.
 ** Beacon
 
 Beacon Repo [[https://github.com/Malabarba/beacon/tree/master]]
@@ -392,8 +400,8 @@ Swiper, an Ivy-enhanced alternative to isearch.
     :init
     (progn
       (add-hook 'pdf-view-mode-hook
-                '(lambda()
-                   (define-key pdf-view-mode-map "\C-s" 'isearch-forward))))
+		'(lambda()
+		   (define-key pdf-view-mode-map "\C-s" 'isearch-forward))))
     :config
     (ivy-mode t)
     (setq ivy-use-virtual-buffers t)
@@ -415,6 +423,7 @@ Swiper, an Ivy-enhanced alternative to isearch.
     ("C-c j"   . 'counsel-git-grep)
     ("C-c k"   . 'counsel-ag)
     ("C-x l"   . 'counsel-locate)
+    ("M-y"     . 'counsel-yank-pop)
     ("C-S-o"   . 'counsel-rhythmbox))
 #+END_SRC
 
@@ -629,9 +638,9 @@ Nyan Mode - Turn your Emacs into Nyanmacs! :)
 
 #+BEGIN_SRC emacs-lisp
 
-  (use-package nyan-mode
-    :config
-    (nyan-mode))
+  ;; (use-package nyan-mode
+  ;;   :config
+  ;;   (nyan-mode))
 
 #+END_SRC
 ** Org Bullets
@@ -659,17 +668,6 @@ Elfeed is an extensible web feed reader for Emacs, supporting both Atom and RSS.
 	       "http://planet.emacsen.org/atom.xml"))
     (elfeed-db-directory "~/.emacs.d/elfeed"))
 #+END_SRC
-
-** Org trello
-
-org-trello [[http://org-trello.github.io]]
-
-Org-trello is an emacs minor mode to extend org-mode with Trello abilities.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package org-trello)
-#+END_SRC
-
 ** Flycheck
 
 flycheck repo [[http://www.flycheck.org/en/latest/]]
@@ -818,6 +816,76 @@ the video beginning.
   (use-package command-log-mode
     :diminish command-log-mode)
 #+END_SRC
+
+** Yasnippet
+
+yasnippet repo [[https://github.com/joaotavora/yasnippet/tree/master]]
+
+YASnippet is a template system for Emacs. It allows you to type an abbreviation
+and automatically expand it into function templates. Bundled language templates
+include: C, C++, C#, Perl, Python, Ruby, SQL, LaTeX, HTML, CSS and more.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet
+    :init
+    (yas-global-mode 1))
+#+END_SRC
+
+** Smartparens
+
+smartparens repo [[https://github.com/Fuco1/smartparens/tree/master]]
+
+Minor mode for Emacs that deals with parens pairs and tries to be smart about
+it.
+
+#+begin_src emacs-lisp
+  (use-package smartparens
+    :init
+    (add-hook 'c-mode-common-hook #'smartparens-strict-mode))
+#+end_src
+
+** Hungry delete
+
+hungry-delete repo [[https://github.com/nflath/hungry-delete]]
+
+This package implements hungry deletion, meaning that deleting a whitespace
+character will delete all whitespace until the next non-whitespace character.
+
+#+begin_src emacs-lisp
+  (use-package hungry-delete
+    :init
+    (global-hungry-delete-mode))
+#+end_src
+
+** Expand region
+
+expand-region.el repo [[https://github.com/magnars/expand-region.el]]
+
+Expand region increases the selected region by semantic units. Just keep
+pressing the key until it selects what you want.
+
+#+begin_src emacs-lisp
+  (use-package expand-region
+    :init
+    (global-set-key (kbd "C-c =") 'er/expand-region))
+#+end_src
+
+** GGtags
+
+ggtags repo [[https://github.com/leoliu/ggtags/tree/master]]
+
+Emacs frontend to GNU Global source code tagging system.
+
+#+begin_src emacs-lisp
+  ;; tags for code navigation
+  (use-package ggtags
+    :config
+    (add-hook 'c-mode-common-hook
+	      (lambda ()
+		(when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+		  (ggtags-mode 1)))))
+
+#+end_src
 
 * Custom Functions
 

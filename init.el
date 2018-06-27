@@ -11,4 +11,3 @@
   (org-babel-load-file "~/.emacs.d/configuration.org"))
 
 (emilianork/load-config)
-(put 'erase-buffer 'disabled nil)

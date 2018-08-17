@@ -1,0 +1,57 @@
+Create Both
+Expunge Both
+SyncState *
+
+##
+## Protonmail Bridge Example
+##
+
+IMAPAccount protonmail
+Host 127.0.0.1
+User user@protonmail.com
+PassCmd "gpg2 -q --for-your-eyes-only --no-tty -d ~/.emacs.d/authinfo.gpg | awk  'NR==1 {print $6}'"
+Port 1143
+SSLType None
+AuthMechs LOGIN
+Timeout 0 # Protonmail Bridge takes a lot of time to sync.
+
+IMAPStore protonmail-remote
+Account protonmail
+
+MaildirStore protonmail-local
+SubFolders Verbatim
+Path /your/mail/dir/path/protonmail/
+Inbox /your/mail/dir/path/protonmail/Inbox
+
+Channel protonmail
+Master :protonmail-remote:
+Slave :protonmail-local:
+Patterns * !Drafts !Trash
+Create Slave
+
+###
+### Gmail Example
+###
+
+IMAPAccount gmail
+Host imap.gmail.com
+User user@gmail.com
+PassCmd "gpg2 -q --for-your-eyes-only --no-tty -d ~/.emacs.d/authinfo.gpg | awk  'NR==2 {print $6}'"
+Port 993
+SSLType IMAPS
+AuthMechs LOGIN
+CertificateFile /etc/ssl/certs/ca-bundle.crt
+
+IMAPStore gmail-remote
+Account gmail
+
+MaildirStore gmail-local
+SubFolders Verbatim
+Path /your/mail/dir/path/gmail/
+Inbox /your/mail/dir/path/gmail/Inbox
+
+Channel gmail
+Master :gmail-remote:
+Slave :gmail-local:
+Patterns * ![Gmail]/Trash
+Create Slave

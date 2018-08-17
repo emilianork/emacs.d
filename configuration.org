@@ -1,4 +1,3 @@
-
 #+TITLE: Emacs configuration
 #+AUTHOR: Emiliano Cabrera
 #+EMAIL: jemiliano.cabrera@protonmail.com
@@ -46,6 +45,7 @@ in separate files, some are used with the default configuration.
   (defvar my-packages '(ag
 			aggressive-indent
 			alert
+			apropospriate-theme
 			auctex
 			beacon
 			challenger-deep-theme
@@ -53,8 +53,11 @@ in separate files, some are used with the default configuration.
 			clojure-mode
 			command-log-mode
 			company
+			company-box
 			company-go
+			company-lsp
 			company-terraform
+			creamsody-theme
 			csv
 			cyberpunk-theme
 			darkokai-theme
@@ -63,9 +66,13 @@ in separate files, some are used with the default configuration.
 			docker-tramp
 			dockerfile-mode
 			doneburn-theme
+			doneburn-theme
 			dracula-theme
 			dumb-jump
 			editorconfig
+			exotica-theme
+			github-theme
+			avk-emacs-themes
 			elfeed
 			esup
 			expand-region
@@ -101,6 +108,7 @@ in separate files, some are used with the default configuration.
 			yaml-mode
 			yasnippet
 			yasnippet-snippets
+			zerodark-theme
 			zone-nyan))
 #+END_SRC
 
@@ -114,23 +122,9 @@ in separate files, some are used with the default configuration.
 #+END_SRC
 
 * Select theme
-Current themes available are:
-
-+ challenger-deep
-+ cyberpunk
-+ doneburn
-+ darkokai
-+ dracula
-+ material
-+ material-light
-+ monokai
-+ monokai-alt
-+ spacemacs-dark
-+ spacemacs-light
-+ sunburn
 
 #+BEGIN_SRC emacs-lisp
-  (load-theme 'material-light t)
+  (load-theme 'zerodark t)
 #+END_SRC
 
 * Default Settings
@@ -204,9 +198,10 @@ actives the functionality again.
   (setq initial-major-mode 'emacs-lisp-mode)
 #+END_SRC
 
-** Don't show scroll-bar and icons
+** Don't show scroll-bar, menu bar and tool bar
 #+BEGIN_SRC emacs-lisp
   (tool-bar-mode -1)
+  (menu-bar-mode -1)
   (toggle-scroll-bar -1)
 #+END_SRC
 
@@ -325,6 +320,17 @@ commands ~C-c left~ and ~C-c right~.
 #+BEGIN_SRC emacs-lisp
   (delete-selection-mode t)
 #+END_SRC
+
+* Email Mu4e
+
+~email.org.example~ contains a template and instructions on how to setup your
+email configuration using mu4e and mybsynrc
+
+#+BEGIN_SRC emacs-lisp
+  (if (file-exists-p "~/.emacs.d/email.org")
+      (org-babel-load-file "~/.emacs.d/email.org"))
+#+END_SRC
+
 * Packages Settings
 
 This section contains settings for some of the packages downloaded.
@@ -609,9 +615,28 @@ Modular in-buffer completion framework for Emacs http://company-mode.github.io/
 
 #+BEGIN_SRC emacs-lisp
   (use-package company
+    :defer 2
     :diminish company-mode
-    :config
-    (global-company-mode))
+    :custom
+    (company-begin-commands '(self-insert-command))
+    (company-idle-delay .1)
+    (company-minimum-prefix-length 2)
+    (company-show-numbers t)
+    (company-tooltip-align-annotations 't)
+    (global-company-mode t))
+#+END_SRC
+
+** Company-box
+
+company-box repo [[https://github.com/sebastiencs/company-box]]
+
+A company fron-end with icons
+
+#+BEGIN_SRC emacs-lisp
+  (use-package company-box
+    :after company
+    :diminish
+    :hook (company-mode . company-box-mode))
 #+END_SRC
 
 ** Clojure-mode
@@ -642,7 +667,8 @@ Cider repo [[https://github.com/clojure-emacs/cider/tree/master/]]
 The Clojure Interactive Development Environment that Rocks for Emacs.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package cider)
+  (use-package cider
+    :diminish cider-mode)
 #+END_SRC
 
 ** Nyan cat
@@ -909,7 +935,6 @@ Emacs frontend to GNU Global source code tagging system.
 		  (ggtags-mode 1)))))
 
 #+end_src
-
 * Custom Functions
 
 Custom functions that add/modify Emacs functionality.
@@ -961,6 +986,13 @@ Custom functions that add/modify Emacs functionality.
 	  (linum-mode 1)
 	  (call-interactively #'goto-line))
       (linum-mode -1)))
+
+
+  (defun emilianork/create-scratch-buffer ()
+    "Create scratcg buffer"
+    (interactive)
+    (switch-to-buffer (get-buffer-create "*scratch*"))
+    (lisp-interaction-mode))
 
   (global-set-key (kbd "M-n b r") 'emilianork/revert-buffer-no-confirm)
   (global-set-key (kbd "M-n b i") 'emilianork/indent-whole-buffer)

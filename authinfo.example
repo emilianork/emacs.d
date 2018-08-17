@@ -1,0 +1,2 @@
+machine 127.0.0.1 login user0@protonmail.com port 993 password mysecret
+machine smtp.gmail.com login user@gmail.com port 587 password mysecret

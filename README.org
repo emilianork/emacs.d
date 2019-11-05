@@ -1,5 +1,7 @@
 * EmilianoRK Emacs Configuration
 
-This repository contains my Emacs configuration. It is written and documented
-using literate programming style. I'm basing this version on
-[[https://github.com/munen/emacs.d]].
+This repository contains my Emacs configuration. It was originally written and
+documented using literate programming style. I have rewritten it with elisp.
+
+If you want to see a literate programmy style configuration I hightly recommend
+you to go [[https://github.com/munen/emacs.d][here]].
